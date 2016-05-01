@@ -144,7 +144,7 @@ public class BookList extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(String... params) {
             //BookClient bc = new BookClient();
-            UserClient uc = new UserClient();
+            UserClient uc = new UserClient("52.36.199.35:80");
             //books = getBookList();
             try {
                 books = uc.recommendBooks(1);
