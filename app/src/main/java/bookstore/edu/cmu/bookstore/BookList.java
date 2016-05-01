@@ -1,6 +1,7 @@
 package bookstore.edu.cmu.bookstore;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,15 +15,21 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import rest.client.Book;
+import rest.client.BookClient;
+import rest.client.UserClient;
 
 public class BookList extends AppCompatActivity {
 
     ProgressBar pb;
+    ListView listView;
+    FloatingActionButton fab;
+    List<Book> books;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +38,13 @@ public class BookList extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        listView = (ListView) findViewById(R.id.listView);
+        fab = (FloatingActionButton) findViewById(R.id.gmap);
         pb = (ProgressBar) findViewById(R.id.progressBar1);
         pb.setVisibility(View.INVISIBLE);
 
-        final List<Book> books = getBookList();
-        BookListAdapter bookAdapter = new BookListAdapter(this, R.layout.book_item, books);
-        ListView listView = (ListView) findViewById(R.id.listView);
-        listView.setAdapter(bookAdapter);
+        BookListTask task = new BookListTask();
+        task.execute("Harry Potter");
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -49,7 +56,6 @@ public class BookList extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.gmap);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,5 +132,36 @@ public class BookList extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private class BookListTask extends AsyncTask<String, String, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            pb.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            //BookClient bc = new BookClient();
+            UserClient uc = new UserClient();
+            //books = getBookList();
+            try {
+                books = uc.recommendBooks(1);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean isSuccessfull) {
+            if (isSuccessfull) {
+                BookListAdapter bookAdapter = new BookListAdapter(BookList.this, R.layout.book_item, books);
+                listView.setAdapter(bookAdapter);
+            }
+            pb.setVisibility(View.INVISIBLE);
+        }
     }
 }

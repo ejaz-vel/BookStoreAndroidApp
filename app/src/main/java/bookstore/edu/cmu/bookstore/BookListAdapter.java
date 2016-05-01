@@ -24,7 +24,7 @@ import rest.client.Book;
 public class BookListAdapter extends ArrayAdapter<Book> {
     private List<Book> books;
 
-    public BookListAdapter(Context context, int resource, List<Book> objects) {
+    public BookListAdapter(BookList context, int resource, List<Book> objects) {
         super(context, resource, objects);
         books = objects;
     }
