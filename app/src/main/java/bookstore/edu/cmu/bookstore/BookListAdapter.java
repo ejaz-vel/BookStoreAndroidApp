@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,7 +85,7 @@ public class BookListAdapter extends ArrayAdapter<Book> {
 
             double a = (Math.sin(latDiff/2) * Math.sin(latDiff/2)) +
                     (Math.cos(currentLatitude) * Math.cos(bookLatitude) *
-                    Math.sin(longDiff/2) * Math.sin(longDiff/2));
+                            Math.sin(longDiff/2) * Math.sin(longDiff/2));
             double c = Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
             return 3958.756 * c;
         }

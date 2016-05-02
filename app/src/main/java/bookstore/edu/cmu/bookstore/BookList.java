@@ -1,10 +1,16 @@
 package bookstore.edu.cmu.bookstore;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -144,10 +150,22 @@ public class BookList extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(String... params) {
             //BookClient bc = new BookClient();
-            UserClient uc = new UserClient("52.36.199.35:80");
+            UserClient uc = new UserClient("52.27.184.29:80");
             //books = getBookList();
             try {
-                books = uc.recommendBooks(1);
+                int coarseLocPermissionCheck = ContextCompat.checkSelfPermission(BookList.this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION);
+                int fineLocPermissionCheck = ContextCompat.checkSelfPermission(BookList.this,
+                        Manifest.permission.ACCESS_FINE_LOCATION);
+
+                if (coarseLocPermissionCheck == PackageManager.PERMISSION_GRANTED &&
+                        fineLocPermissionCheck == PackageManager.PERMISSION_GRANTED) {
+                    LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+                    Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    books = uc.recommendBooks(1, location.getLatitude(), location.getLongitude());
+                } else {
+                    books = uc.recommendBooks(1, null, null);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
                 return false;
