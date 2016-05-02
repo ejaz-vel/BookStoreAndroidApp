@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 
@@ -60,8 +62,10 @@ public class BookListAdapter extends ArrayAdapter<Book> {
         if (book.getLatitude() != null && book.getLongitude() != null) {
             Double dist = getDistancetoBook(book);
             if (dist != null) {
+                DecimalFormat df = new DecimalFormat("#.#");
+                df.setRoundingMode(RoundingMode.CEILING);
                 TextView bookDistance = (TextView) convertView.findViewById(R.id.bookDistance);
-                bookDistance.setText(String.valueOf(dist) + " miles");
+                bookDistance.setText(df.format(dist) + " miles");
             }
         }
 
