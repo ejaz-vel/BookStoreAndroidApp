@@ -108,6 +108,7 @@ public class Map extends AppCompatActivity
         } else {
             setContentView(R.layout.activity_map);
         }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public boolean servicesOK() {
@@ -176,6 +177,11 @@ public class Map extends AppCompatActivity
         InputMethodManager imm =
                 (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
+
+    @Override
+    public boolean onSearchRequested() {
+        return super.onSearchRequested();
     }
 
     public void geoLocate(View v) throws IOException {

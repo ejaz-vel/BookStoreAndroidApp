@@ -59,6 +59,11 @@ public class BookDetail extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    @Override
+    public boolean onSearchRequested() {
+        return super.onSearchRequested();
+    }
+
     private Bitmap getBitmapFromAsset(String assetName) {
         AssetManager assetManager = this.getAssets();
         InputStream stream = null;

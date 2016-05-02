@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +33,7 @@ import rest.client.Book;
 public class BookListAdapter extends ArrayAdapter<Book> {
     private List<Book> books;
 
-    public BookListAdapter(BookList context, int resource, List<Book> objects) {
+    public BookListAdapter(AppCompatActivity context, int resource, List<Book> objects) {
         super(context, resource, objects);
         books = objects;
     }
