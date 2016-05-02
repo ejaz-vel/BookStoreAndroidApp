@@ -2,17 +2,15 @@ package bookstore.edu.cmu.bookstore;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
@@ -27,9 +25,12 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.HashMap;
 import java.util.List;
 
 import rest.client.Book;
@@ -42,6 +43,7 @@ public class Map extends AppCompatActivity
 
     private GoogleApiClient mLocationClient;
     private List<Book> books;
+    private java.util.Map<Marker, Book> markerMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,13 +73,29 @@ public class Map extends AppCompatActivity
                     if (location != null) {
                         gotoLocation(location.getLatitude(), location.getLongitude(), 15);
                     } else {
-                        Book book = books.get(0);
-                        gotoLocation(book.getLatitude(), book.getLongitude(), 15);
+                        for (Book book: books) {
+                            if (book.getLongitude() != null && book.getLatitude() != null) {
+                                gotoLocation(book.getLatitude(), book.getLongitude(), 15);
+                                break;
+                            }
+                        }
                     }
 
+                    NumberFormat formatter = NumberFormat.getCurrencyInstance();
                     for (Book book: books) {
-                        MarkerOptions options = new MarkerOptions().position(new LatLng(book.getLatitude(), book.getLongitude()));
-                        mMap.addMarker(options);
+                        if (book.getLatitude() != null && book.getLongitude() != null) {
+                            MarkerOptions options = new MarkerOptions()
+                                    .position(new LatLng(book.getLatitude(), book.getLongitude()))
+                                    .title(book.getName());
+                            if (book.getPrice() != null) {
+                                options.snippet(book.getAuthor() + "\n" + formatter.format(book.getPrice()));
+                            } else {
+                                options.snippet(book.getAuthor());
+                            }
+
+                            Marker marker = mMap.addMarker(options);
+                            markerMap.put(marker, book);
+                        }
                     }
                 } else {
                     ActivityCompat.requestPermissions(this,
@@ -110,6 +128,14 @@ public class Map extends AppCompatActivity
             SupportMapFragment mapFragment =
                     (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment);
             mMap = mapFragment.getMap();
+            mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                @Override
+                public void onInfoWindowClick(Marker marker) {
+                    Intent intent = new Intent(Map.this, BookDetail.class);
+                    intent.putExtra("BOOK", markerMap.get(marker));
+                    startActivity(intent);
+                }
+            });
         }
         return (mMap != null);
     }
@@ -126,8 +152,12 @@ public class Map extends AppCompatActivity
                     if (location != null) {
                         gotoLocation(location.getLatitude(), location.getLongitude(), 15);
                     } else {
-                        Book book = books.get(0);
-                        gotoLocation(book.getLatitude(), book.getLongitude(), 15);
+                        for (Book book: books) {
+                            if (book.getLongitude() != null && book.getLatitude() != null) {
+                                gotoLocation(book.getLatitude(), book.getLongitude(), 15);
+                                break;
+                            }
+                        }
                     }
                 } catch (SecurityException e) {
                     e.printStackTrace();

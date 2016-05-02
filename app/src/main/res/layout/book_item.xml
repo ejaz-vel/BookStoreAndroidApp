@@ -40,7 +40,7 @@
             android:id="@+id/bookDistance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0.6 miles"
+            android:text="Book Distance"
             android:textSize="20sp"/>
 
     </LinearLayout>
