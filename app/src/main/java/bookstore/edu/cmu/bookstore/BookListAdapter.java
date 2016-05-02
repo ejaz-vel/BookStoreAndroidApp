@@ -43,7 +43,9 @@ public class BookListAdapter extends ArrayAdapter<Book> {
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
 
         TextView bookPrice = (TextView)convertView.findViewById(R.id.bookPrice);
-        bookPrice.setText(formatter.format(book.getPrice()));
+        if (book.getPrice() != null) {
+            bookPrice.setText(formatter.format(book.getPrice()));
+        }
 
         ImageView bookImage = (ImageView) convertView.findViewById(R.id.imageView);
         Bitmap bitmap = getBitmapFromAsset("harry_potter.jpg");

@@ -33,12 +33,16 @@ public class BookDetail extends AppCompatActivity {
         TextView bookName = (TextView) findViewById(R.id.nameText);
         bookName.setText(book.getName());
 
-        NumberFormat formatter = NumberFormat.getCurrencyInstance();
-        TextView bookPrice = (TextView) findViewById(R.id.priceText);
-        bookPrice.setText(formatter.format(book.getPrice()));
+        if (book.getPrice() != null) {
+            NumberFormat formatter = NumberFormat.getCurrencyInstance();
+            TextView bookPrice = (TextView) findViewById(R.id.priceText);
+            bookPrice.setText(formatter.format(book.getPrice()));
+        }
 
-        TextView bookDesc = (TextView) findViewById(R.id.descriptionText);
-        bookDesc.setText(book.getDescription());
+        if (book.getDescription() != null) {
+            TextView bookDesc = (TextView) findViewById(R.id.descriptionText);
+            bookDesc.setText(book.getDescription());
+        }
 
         ImageView bookImage = (ImageView) findViewById(R.id.imageView);
         Bitmap bitmap = getBitmapFromAsset("harry_potter.jpg");
