@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import org.apache.commons.lang.StringUtils;
@@ -65,6 +66,10 @@ public class BookDetail extends AppCompatActivity {
         ImageView bookImage = (ImageView) findViewById(R.id.imageView);
         Bitmap bitmap = getBitmapFromAsset("harry_potter.jpg");
         bookImage.setImageBitmap(bitmap);
+
+        RatingBar condition = (RatingBar) findViewById(R.id.ratingBar);
+        condition.setVisibility(View.VISIBLE);
+        condition.setRating(book.getCondition());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.cart);
         fab.setOnClickListener(new View.OnClickListener() {
