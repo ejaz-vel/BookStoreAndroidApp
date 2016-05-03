@@ -18,6 +18,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.RoundingMode;
@@ -47,7 +49,7 @@ public class BookListAdapter extends ArrayAdapter<Book> {
 
         Book book = books.get(position);
         TextView bookName = (TextView)convertView.findViewById(R.id.bookName);
-        bookName.setText(book.getName());
+        bookName.setText(StringUtils.capitalize(book.getName()));
 
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
 
