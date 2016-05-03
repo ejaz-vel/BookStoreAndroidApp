@@ -1,5 +1,6 @@
 package bookstore.edu.cmu.bookstore;
 
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,7 +19,10 @@ import org.apache.commons.lang.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import rest.client.Book;
 
@@ -33,7 +37,7 @@ public class BookDetail extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Book book = (Book) getIntent().getSerializableExtra("BOOK");
+        final Book book = (Book) getIntent().getSerializableExtra("BOOK");
         TextView bookName = (TextView) findViewById(R.id.nameText);
         bookName.setText(StringUtils.capitalize(book.getName() + " " + book.getEdition()));
 
@@ -66,8 +70,20 @@ public class BookDetail extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Book added to cart", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+            }
+        });
+
+        ImageView directionImage = (ImageView) findViewById(R.id.directionImage);
+        directionImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Book> books = new ArrayList<>();
+                books.add(book);
+                Intent intent = new Intent(BookDetail.this, Map.class);
+                intent.putExtra("BOOKS", (Serializable) books);
+                startActivity(intent);
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
