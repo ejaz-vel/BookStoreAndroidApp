@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.NumberFormat;
@@ -33,10 +35,17 @@ public class BookDetail extends AppCompatActivity {
 
         Book book = (Book) getIntent().getSerializableExtra("BOOK");
         TextView bookName = (TextView) findViewById(R.id.nameText);
-        bookName.setText(book.getName() + " " + book.getEdition());
+        bookName.setText(StringUtils.capitalize(book.getName() + " " + book.getEdition()));
 
         TextView bookAuthor = (TextView) findViewById(R.id.authorText);
-        bookAuthor.setText(book.getAuthor());
+        bookAuthor.setText(StringUtils.capitalize(book.getAuthor()));
+
+        TextView rent_sale = (TextView) findViewById(R.id.saleText);
+        if (book.getRentAllowed() != null && book.getRentAllowed() == true) {
+            rent_sale.setText("Book for Rent");
+        } else {
+            rent_sale.setText("Book for Sale");
+        }
 
         if (book.getPrice() != null) {
             NumberFormat formatter = NumberFormat.getCurrencyInstance();
