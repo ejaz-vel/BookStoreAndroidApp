@@ -33,7 +33,10 @@ public class BookDetail extends AppCompatActivity {
 
         Book book = (Book) getIntent().getSerializableExtra("BOOK");
         TextView bookName = (TextView) findViewById(R.id.nameText);
-        bookName.setText(book.getName());
+        bookName.setText(book.getName() + " " + book.getEdition());
+
+        TextView bookAuthor = (TextView) findViewById(R.id.authorText);
+        bookAuthor.setText(book.getAuthor());
 
         if (book.getPrice() != null) {
             NumberFormat formatter = NumberFormat.getCurrencyInstance();
