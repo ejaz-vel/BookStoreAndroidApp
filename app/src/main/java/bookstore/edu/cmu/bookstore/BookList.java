@@ -155,9 +155,7 @@ public class BookList extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(String... params) {
-            //BookClient bc = new BookClient();
             UserClient uc = new UserClient("52.27.184.29:80");
-            //books = getBookList();
             try {
                 int coarseLocPermissionCheck = ContextCompat.checkSelfPermission(BookList.this,
                         Manifest.permission.ACCESS_COARSE_LOCATION);
@@ -168,7 +166,11 @@ public class BookList extends AppCompatActivity {
                         fineLocPermissionCheck == PackageManager.PERMISSION_GRANTED) {
                     LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
                     Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    books = uc.recommendBooks(1, location.getLatitude(), location.getLongitude());
+                    if (location == null) {
+                        books = uc.recommendBooks(1, null, null);
+                    } else {
+                        books = uc.recommendBooks(1, location.getLatitude(), location.getLongitude());
+                    }
                 } else {
                     books = uc.recommendBooks(1, null, null);
                 }

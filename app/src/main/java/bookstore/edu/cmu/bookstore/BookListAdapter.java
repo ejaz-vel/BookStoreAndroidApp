@@ -85,16 +85,18 @@ public class BookListAdapter extends ArrayAdapter<Book> {
                 fineLocPermissionCheck == PackageManager.PERMISSION_GRANTED) {
             LocationManager lm = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
             Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            double currentLatitude = Math.toRadians(location.getLatitude());
-            double bookLatitude = Math.toRadians(book.getLatitude());
-            double latDiff = Math.toRadians(book.getLatitude() - location.getLatitude());
-            double longDiff = Math.toRadians(book.getLongitude() - location.getLongitude());
+            if (location != null) {
+                double currentLatitude = Math.toRadians(location.getLatitude());
+                double bookLatitude = Math.toRadians(book.getLatitude());
+                double latDiff = Math.toRadians(book.getLatitude() - location.getLatitude());
+                double longDiff = Math.toRadians(book.getLongitude() - location.getLongitude());
 
-            double a = (Math.sin(latDiff/2) * Math.sin(latDiff/2)) +
-                    (Math.cos(currentLatitude) * Math.cos(bookLatitude) *
-                            Math.sin(longDiff/2) * Math.sin(longDiff/2));
-            double c = Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            return 3958.756 * c;
+                double a = (Math.sin(latDiff / 2) * Math.sin(latDiff / 2)) +
+                        (Math.cos(currentLatitude) * Math.cos(bookLatitude) *
+                                Math.sin(longDiff / 2) * Math.sin(longDiff / 2));
+                double c = Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                return 3958.756 * c;
+            }
         }
         return null;
     }
